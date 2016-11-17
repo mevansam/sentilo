@@ -13,4 +13,13 @@
 			ignore-unresolvable="true" />	
 	</beans>
 
+	<beans profile="cloud-dev">
+		<context:property-placeholder location="classpath*:properties/integration-cloud-dev.properties"
+			ignore-unresolvable="true" />
+		<context:property-placeholder location="classpath*:properties/jedis-config-cloud-dev.properties"
+			ignore-unresolvable="true" />
+		<context:property-placeholder location="classpath*:properties/config-cloud-dev.properties"
+			ignore-unresolvable="true" />	
+	</beans>
+
 </beans>

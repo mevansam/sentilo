@@ -9,4 +9,9 @@
 			ignore-unresolvable="true" />
 	</beans>
 
+	<beans profile="dev">
+		<context:property-placeholder location="classpath*:properties/config-cloud-dev.properties"
+			ignore-unresolvable="true" />
+	</beans>
+
 </beans>

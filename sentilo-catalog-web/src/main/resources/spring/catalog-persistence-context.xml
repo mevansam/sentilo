@@ -6,12 +6,38 @@
 		http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
+    <bean id="mongoSeedlID" class="com.mongodb.ServerAddress">
+        <constructor-arg type="java.lang.String" name="host" value="${catalog.mongodb.host}" />
+        <constructor-arg type="int" name="port" value="${catalog.mongodb.port}" />
+    </bean>
+    
+	<bean id="mongoSeedListID" class="java.util.ArrayList">
+        <constructor-arg>
+            <list>
+                <ref bean="mongoSeedlID" />
+            </list>
+        </constructor-arg>
+    </bean>
+    
+    <bean id="mongoCredentialID" class="com.mongodb.MongoCredential">
+        <constructor-arg name="mechanism" value="#{T(com.mongodb.AuthenticationMechanism).SCRAM_SHA_1}" />
+        <constructor-arg type="java.lang.String" name="userName" value="${catalog.mongodb.user}" />
+        <constructor-arg type="java.lang.String" name="source" value="${catalog.mongodb.database}" />
+        <constructor-arg type="char[]" name="password" value="${catalog.mongodb.password}" />
+    </bean>
+    
+    <bean id="mongoClientID" class="com.mongodb.MongoClient">
+        <constructor-arg ref="mongoSeedListID" />
+        <constructor-arg ref="mongoCredentialID" />
+    </bean>
+    
+     <bean id="mongoDbFactory" class="org.springframework.data.mongodb.core.SimpleMongoDbFactory">
+        <constructor-arg ref="mongoClientID" />
+        <constructor-arg name="databaseName" value="${catalog.mongodb.database}" />
+    </bean>
+    
 	<!-- Default bean name is 'mongo' -->
 	<mongo:mongo host="${catalog.mongodb.host}" port="${catalog.mongodb.port}" />
-
-	<!-- Default bean name is 'mongoDbFactory' -->
-	<mongo:db-factory dbname="${catalog.mongodb.database}" mongo-ref="mongo" username="${catalog.mongodb.user}"
-		password="${catalog.mongodb.password}" write-concern="ACKNOWLEDGED" />
 
 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate" c:mongoDbFactory-ref="mongoDbFactory" />
 

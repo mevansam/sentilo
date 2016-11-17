@@ -47,7 +47,7 @@ public final class SentiloServer {
 
   @SuppressWarnings("resource")
   public static void main(final String... args) {
-    final String activeProfiles = System.getProperty("spring.profiles.active");
+    final String activeProfiles = System.getProperty("spring.profiles.active", System.getenv("SPRING_PROFILES_ACTIVE"));
     LOGGER.info("Starting server");
     LOGGER.info("Active profile:{}", activeProfiles);
 

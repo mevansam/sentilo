@@ -11,4 +11,8 @@
 		<util:properties id="catalogProperties" location="classpath:properties/catalog-config.properties" />
 	</beans>
 
+	<beans profile="cloud-dev">
+		<util:properties id="catalogProperties" location="classpath:properties/catalog-config-cloud-dev.properties" />
+	</beans>
+
 </beans>
