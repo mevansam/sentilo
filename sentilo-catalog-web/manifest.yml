@@ -1,0 +1,17 @@
+---
+env:
+  SPRING_PROFILES_ACTIVE: cloud-dev
+  CATALOG_MONGODB_HOST: 54.67.98.218
+  CATALOG_MONGODB_PORT: 27017
+  CATALOG_MONGODB_DATABASE: sentilo
+  CATALOG_MONGODB_USER: sentilo
+  CATALOG_MONGODB_PASSWORD: sentilo
+  REST_CLIENT_HOST: https://sentilo-platform.cfapps.io 
+  
+applications:
+- name: sentilo-catalog
+  host: sentilo-catalog
+  memory: 1G
+  instances: 1
+  path: target/sentilo-catalog-web.war
+  
