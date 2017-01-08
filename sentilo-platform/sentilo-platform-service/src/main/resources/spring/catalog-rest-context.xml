@@ -5,7 +5,9 @@
 
 	<bean id="pushRestClient" class="org.sentilo.common.rest.impl.RESTClientImpl" scope="prototype"/>
 	
-	<bean id="restClientImpl" class="org.sentilo.common.rest.impl.RESTClientImpl" p:host="${catalog.rest.endpoint}"
+	<bean id="restClientImpl" class="org.sentilo.common.rest.impl.RESTClientImpl" 
+		p:host="${catalog.rest.endpoint}"
+		p:skipSSLValidation="${catalog.rest.skipSSLValidation:false}"		
 		p:credentials-ref="usernameAndPassword" />
 
 	<bean id="usernameAndPassword" class="org.apache.http.auth.UsernamePasswordCredentials" c:usernamePassword="${catalog.rest.credentials}" />

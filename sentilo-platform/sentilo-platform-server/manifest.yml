@@ -1,10 +1,11 @@
 ---
 env:
   SPRING_PROFILES_ACTIVE: cloud-dev
-  JEDIS_POOL_HOST: redis-15520.c8.us-east-1-2.ec2.cloud.redislabs.com
-  JEDIS_POOL_PORT: 15520
-  JEDIS_POOL_PASSWORD: EbfJIgob8XvDMEOg
-  CATALOG_REST_ENDPOINT: https://sentilo-catalog.cfapps.io
+  JEDIS_POOL_HOST: 10.2.9.102
+  JEDIS_POOL_PORT: 6379
+  JEDIS_POOL_PASSWORD: sentilo
+  CATALOG_REST_ENDPOINT: https://sentilo-catalog.pcf.kwt.nxn.ae
+  CATALOG_REST_SKIPSSLVALIDATION: true
   
 applications:
 - name: sentilo-platform

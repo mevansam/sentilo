@@ -13,7 +13,9 @@
 	<!-- Esta es una configuracion que solo admite un cliente REST. Si una aplicacion necesita implementar mas de un cliente, 
 		entonces debe definir su propio fichero de configuracion, basandose en este, y en el cual definir cada uno de los clientes. -->
 
-	<bean id="restClientImpl" class="org.sentilo.common.rest.impl.RESTClientImpl" p:host="${rest.client.host}"
+	<bean id="restClientImpl" class="org.sentilo.common.rest.impl.RESTClientImpl" 
+		p:host="${rest.client.host}"
+		p:skipSSLValidation="${rest.client.skipSSLValidation:false}"
 		p:interceptors-ref="interceptors" />
 
 	<util:list id="interceptors">

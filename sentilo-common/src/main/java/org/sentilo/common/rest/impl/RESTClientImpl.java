@@ -33,6 +33,8 @@
 package org.sentilo.common.rest.impl;
 
 import java.security.GeneralSecurityException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponse;
@@ -46,6 +48,10 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -79,6 +85,7 @@ public class RESTClientImpl implements RESTClient, InitializingBean {
 
   private String host;
   private String secretKey;
+  private boolean skipSSLValidation;
 
   public RESTClientImpl() {
   }
@@ -148,7 +155,9 @@ public class RESTClientImpl implements RESTClient, InitializingBean {
   @Override
   public void afterPropertiesSet() throws Exception {
     if (httpClient == null) {
-      final PoolingClientConnectionManager pccm = new PoolingClientConnectionManager();
+
+      final PoolingClientConnectionManager pccm = createConnectionManager();
+      
       // Increase max total connection to 400
       pccm.setMaxTotal(400);
       // Increase default max connection per route to 50
@@ -168,6 +177,28 @@ public class RESTClientImpl implements RESTClient, InitializingBean {
 
     if (credentials != null && httpClient instanceof DefaultHttpClient) {
       ((DefaultHttpClient) httpClient).getCredentialsProvider().setCredentials(authScope, credentials);
+    }
+  }
+  
+  private PoolingClientConnectionManager createConnectionManager() throws Exception {
+
+      if (skipSSLValidation) {
+    	  
+	    LOGGER.warn("SSL Validation will be skipped on rest endpoints.");
+      	
+        TrustStrategy acceptingTrustStrategy = new TrustStrategy() {
+          public boolean isTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+            return true;
+          }
+        };
+          
+       SSLSocketFactory sf = new SSLSocketFactory(acceptingTrustStrategy, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+       SchemeRegistry registry = new SchemeRegistry();
+       registry.register(new Scheme("https", 443, sf));
+       
+       return new PoolingClientConnectionManager(registry);
+     } else {
+       return new PoolingClientConnectionManager();
     }
   }
 
@@ -289,6 +320,10 @@ public class RESTClientImpl implements RESTClient, InitializingBean {
 
   public void setSecretKey(final String secretKey) {
     this.secretKey = secretKey;
+  }
+
+  public void setSkipSSLValidation(final boolean skipSSLValidation) {
+    this.skipSSLValidation = skipSSLValidation;
   }
 
 }
